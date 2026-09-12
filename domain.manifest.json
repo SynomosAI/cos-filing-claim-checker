@@ -1,0 +1,93 @@
+{
+  "_instructions": "本文件是行业接入四件套之一。域 ID 一经分配不复用。填完跑平台侧校验器自测。",
+  "profile_version": "domain/1.0",
+  "domain_id": "cos",
+  "domain_name": "化妆品 · 注册备案与功效宣称",
+  "operator": {
+    "org": "待认领 — 本域开放给具备资质的运营方",
+    "contact": "见 README 的「认领方式」",
+    "agent_card": "https://SynomosAI.github.io/.well-known/agent-card.json"
+  },
+  "attributes": [
+    {
+      "key": "cos.product_type",
+      "type": "enum",
+      "values": [
+        "special",
+        "general",
+        "toothpaste",
+        "unclassified"
+      ],
+      "issuer_required": true,
+      "ttl_days": 365,
+      "assurance_min": "verified",
+      "visibility_default": "private"
+    },
+    {
+      "key": "cos.filing_status",
+      "type": "enum",
+      "values": [
+        "registered",
+        "filed",
+        "pending",
+        "expired",
+        "not_required"
+      ],
+      "issuer_required": true,
+      "ttl_days": 365,
+      "assurance_min": "verified",
+      "visibility_default": "private"
+    },
+    {
+      "key": "cos.claim_evidence",
+      "type": "enum",
+      "values": [
+        "published",
+        "partial",
+        "none",
+        "not_applicable"
+      ],
+      "issuer_required": true,
+      "ttl_days": 365,
+      "assurance_min": "verified",
+      "visibility_default": "private"
+    },
+    {
+      "key": "cos.ingredient_compliance",
+      "type": "enum",
+      "values": [
+        "compliant",
+        "restricted_exceeded",
+        "prohibited_detected",
+        "unknown"
+      ],
+      "issuer_required": true,
+      "ttl_days": 180,
+      "assurance_min": "verified",
+      "visibility_default": "private"
+    },
+    {
+      "key": "cos.label_compliance",
+      "type": "enum",
+      "values": [
+        "compliant",
+        "non_compliant",
+        "pending"
+      ],
+      "issuer_required": false,
+      "ttl_days": 180,
+      "assurance_min": "verified",
+      "visibility_default": "private"
+    }
+  ],
+  "checker_endpoint": "mcp://pending-claim/cos-checker",
+  "gate_map_ref": "./gate-map.json",
+  "privacy_ref": "./privacy.json",
+  "red_lines": [
+    "不得输出「可祛斑美白」「可治疗」等超出化妆品定义的功效或医疗用语表述",
+    "功效宣称须有已公布的依据摘要，AI 不得代拟或补写宣称内容",
+    "不得输出「已备案」「已注册」结论，以药监部门公示为唯一依据"
+  ],
+  "valid_from": "2026-09-12",
+  "status": "RESERVED"
+}
