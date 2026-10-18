@@ -1,0 +1,50 @@
+# cos-filing-claim-checker — 完整文本
+
+本文件为 llms.txt 标准的「完整版」，供长上下文模型一次性读取本仓的完整说明。
+
+## 这是什么
+
+`cos-filing-claim-checker` 是 SynomosAI 平台的一个行业接入域声明仓（domain id `cos`，profile `domain/1.0`，当前状态 `RESERVED`，占位时间 2026-09-12）。它把「这款化妆品有没有备案、能不能这么宣称」拆成可核验的属性，让 AI 只做要件提示，不做宣称与放行结论。
+
+一句话：化妆品注册备案状态 + 功效宣称依据的出处链核验，checker 只出示、不下判定。
+
+## 解决什么问题
+
+1. 特殊化妆品要注册、普通化妆品要备案，两条路径要求不同，容易被混为一谈。
+2. 功效宣称必须有已公布的依据摘要，市场上超范围宣称、借医疗用语暗示疗效是重灾区。
+3. AI 容易越权替人下「已备案 / 已合规 / 可祛斑」结论——本仓用红线 + gate-map 把这种输出挡掉。
+
+## 属性（5 个）
+
+- `cos.product_type`：special/general/toothpaste/unclassified
+- `cos.filing_status`：registered/filed/pending/expired/not_required（以药监公示为准）
+- `cos.claim_evidence`：published/partial/none/not_applicable
+- `cos.ingredient_compliance`：compliant/restricted_exceeded/prohibited_detected/unknown
+- `cos.label_compliance`：compliant/non_compliant/pending
+
+## 红线（3 条，机器可读，gate-map 各有阻断规则）
+
+1. 不得输出超出化妆品定义的功效或医疗用语（如「可治疗」「可祛斑美白」）。
+2. 功效宣称须有已公布的依据摘要，AI 不得代拟或补写宣称。
+3. 不得输出「已备案」「已注册」结论，以药监公示为唯一依据。
+
+## 快速开始
+
+```bash
+git clone https://github.com/SynomosAI/cos-filing-claim-checker.git
+cd cos-filing-claim-checker
+python -m json.tool domain.manifest.json > /dev/null   # 校验 JSON 合法
+```
+
+## 触发词
+
+化妆品备案 / 特殊化妆品注册 / 功效宣称依据 / 美白宣称能不能写 / 化妆品标签医疗用语 / 备案状态怎么核验 / 化妆品原料禁用组分 / 这个化妆品合规吗（注：本域不下合规结论，只出示出处链）。
+
+## 许可与权利
+
+代码与配置按 MIT 许可使用（见根目录 LICENSE，© 2026 SynomosAI）。文档知识版权归 SynomosAI 所有。checker 输出仅出示与核验属性的出处链，不构成对主体资质或事项合规性的专业结论；结论权归本域资质方、监管方与持有人本人。
+
+## 链接
+
+- 仓库: https://github.com/SynomosAI/cos-filing-claim-checker
+- 四件套: domain.manifest.json / gate-map.json / privacy.json / checker.io.json
